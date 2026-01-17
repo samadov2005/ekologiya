@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekologiya Test Platformasi</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --bg-main: #f0fdf4;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #d1fae5;
+        }
+        
+        .theme-dark {
+            --primary: #34d399;
+            --primary-dark: #10b981;
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+        }
+        
+        .theme-morning {
+            --primary: #f59e0b;
+            --primary-dark: #d97706;
+            --bg-main: #fffbeb;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #fde68a;
+        }
+        
+        .theme-ocean {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --bg-main: #f0f9ff;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #bae6fd;
+        }
+        
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+        
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .text-primary { color: var(--primary); }
+        .bg-primary { background-color: var(--primary); }
+        .border-primary { border-color: var(--primary); }
+        
+        .option-btn {
+            transition: all 0.2s;
+            border: 2px solid var(--border);
+            background-color: var(--bg-card);
+        }
+        
+        .option-btn:hover {
+            border-color: var(--primary);
+            background-color: var(--bg-main);
+        }
+        
+        .option-btn.selected {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .option-btn.correct {
+            border-color: #10b981;
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .option-btn.incorrect {
+            border-color: #ef4444;
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .rank-gold { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+        .rank-silver { background: linear-gradient(135deg, #9ca3af, #6b7280); }
+        .rank-bronze { background: linear-gradient(135deg, #d97706, #b45309); }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            transition: width 0.3s ease;
+        }
+        
+        .timer-warning { animation: pulse 1s infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .leaf-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c-5 10-15 15-25 15 5 15 15 25 25 35 10-10 20-20 25-35-10 0-20-5-25-15z' fill='%2310b98110'/%3E%3C/svg%3E");
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: var(--bg-main); }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+    </style>
+</head>
+<body class="min-h-screen leaf-pattern">
+    <!-- Login/Register Page -->
+    <div id="authPage" class="min-h-screen flex items-center justify-center p-4">
+        <div class="card rounded-2xl shadow-2xl p-8 w-full max-w-md fade-in">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-leaf text-white text-3xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold">Ekologiya Test Platformasi</h1>
+                <p class="text-secondary mt-2">Bilimlaringizni sinab ko'ring!</p>
+            </div>
+            
+            <div id="loginForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Foydalanuvchi nomi</label>
+                        <input type="text" id="loginUsername" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary" placeholder="Foydalanuvchi nomingiz">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Parol</label>
+                        <input type="password" id="loginPassword" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary" placeholder="Parolingiz">
+                    </div>
+                    <button onclick="login()" class="w-full btn-primary py-3 rounded-lg font-semibold">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Kirish
+                    </button>
+                </div>
+                <p class="text-center mt-6 text-secondary">
+                    Akkauntingiz yo'qmi? 
+                    <button onclick="showRegister()" class="text-primary font-semibold hover:underline">Ro'yxatdan o'ting</button>
+                </p>
+            </div>
+            
+            <div id="registerForm" class="hidden">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">To'liq ism</label>
+                        <input type="text" id="regFullname" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary" placeholder="Ismingiz">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Foydalanuvchi nomi</label>
+                        <input type="text" id="regUsername" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary" placeholder="Username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Parol</label>
+                        <input type="password" id="regPassword" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary" placeholder="Parol yarating">
+                    </div>
+                    <button onclick="register()" class="w-full btn-primary py-3 rounded-lg font-semibold">
+                        <i class="fas fa-user-plus mr-2"></i>Ro'yxatdan o'tish
+                    </button>
+                </div>
+                <p class="text-center mt-6 text-secondary">
+                    Akkauntingiz bormi? 
+                    <button onclick="showLogin()" class="text-primary font-semibold hover:underline">Kirish</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <!-- Header -->
+        <header class="card shadow-sm sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                        <i class="fas fa-leaf text-white"></i>
+                    </div>
+                    <span class="font-bold text-lg hidden sm:block">EkoTest</span>
+                </div>
+                
+                <nav class="flex items-center gap-2">
+                    <button onclick="showPage('dashboard')" class="nav-btn px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" data-page="dashboard">
+                        <i class="fas fa-home mr-1"></i><span class="hidden sm:inline">Bosh sahifa</span>
+                    </button>
+                    <button onclick="showPage('leaderboard')" class="nav-btn px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" data-page="leaderboard">
+                        <i class="fas fa-trophy mr-1"></i><span class="hidden sm:inline">Reyting</span>
+                    </button>
+                    <button onclick="showPage('profile')" class="nav-btn px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" data-page="profile">
+                        <i class="fas fa-user mr-1"></i><span class="hidden sm:inline">Profil</span>
+                    </button>
+                </nav>
+                
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <button onclick="toggleThemeMenu()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                            <i class="fas fa-palette text-lg"></i>
+                        </button>
+                        <div id="themeMenu" class="hidden absolute right-0 mt-2 w-48 card rounded-lg shadow-lg py-2 z-50">
+                            <button onclick="setTheme('')" class="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+                                <span class="w-4 h-4 rounded-full bg-green-500"></span>Yashil (standart)
+                            </button>
+                            <button onclick="setTheme('theme-dark')" class="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+                                <span class="w-4 h-4 rounded-full bg-slate-800"></span>Tungi rejim
+                            </button>
+                            <button onclick="setTheme('theme-morning')" class="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+                                <span class="w-4 h-4 rounded-full bg-amber-500"></span>Tonggi rejim
+                            </button>
+                            <button onclick="setTheme('theme-ocean')" class="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+                                <span class="w-4 h-4 rounded-full bg-sky-500"></span>Okean rejim
+                            </button>
+                        </div>
+                    </div>
+                    <button onclick="logout()" class="p-2 rounded-lg hover:bg-red-100 text-red-500 transition">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page max-w-7xl mx-auto px-4 py-6">
+            <div class="mb-8 fade-in">
+                <h1 class="text-2xl font-bold mb-2">Xush kelibsiz, <span id="welcomeName"></span>!</h1>
+                <p class="text-secondary">Ekologiya fanidan bilimlaringizni sinab ko'ring</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="card rounded-xl p-4 fade-in">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold" id="statCorrect">0</p>
+                            <p class="text-sm text-secondary">To'g'ri javoblar</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card rounded-xl p-4 fade-in">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tasks text-blue-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold" id="statTotal">0</p>
+                            <p class="text-sm text-secondary">Jami testlar</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card rounded-xl p-4 fade-in">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-percentage text-purple-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold" id="statAccuracy">0%</p>
+                            <p class="text-sm text-secondary">Aniqlik</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card rounded-xl p-4 fade-in">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-medal text-amber-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold" id="statRank">#-</p>
+                            <p class="text-sm text-secondary">Reyting</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Options -->
+            <h2 class="text-xl font-bold mb-4">Test turlari</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Variant Tests -->
+                <div class="card rounded-xl p-6 hover:shadow-lg transition fade-in cursor-pointer" onclick="showVariantSelection()">
+                    <div class="w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-list-ol text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Variantlar bo'yicha</h3>
+                    <p class="text-secondary text-sm mb-4">Har bir variantda 10 tadan test. Boblar bo'yicha tanlang.</p>
+                    <div class="flex items-center text-primary font-medium">
+                        <span>Boshlash</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+
+                <!-- Random Test -->
+                <div class="card rounded-xl p-6 hover:shadow-lg transition fade-in cursor-pointer" onclick="showRandomTestSettings()">
+                    <div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-random text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Tasodifiy test</h3>
+                    <p class="text-secondary text-sm mb-4">Vaqt va savol sonini o'zingiz belgilang.</p>
+                    <div class="flex items-center text-primary font-medium">
+                        <span>Sozlash</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+
+                <!-- Group Test -->
+                <div class="card rounded-xl p-6 hover:shadow-lg transition fade-in cursor-pointer" onclick="showGroupTest()">
+                    <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Guruh bilan</h3>
+                    <p class="text-secondary text-sm mb-4">Do'stlaringiz bilan birgalikda test ishlang.</p>
+                    <div class="flex items-center text-primary font-medium">
+                        <span>Qo'shilish</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter Selection -->
+            <h2 class="text-xl font-bold mb-4">Boblar</h2>
+            <div class="grid md:grid-cols-2 gap-4" id="chaptersGrid">
+                <!-- Will be populated by JS -->
+            </div>
+        </div>
+
+        <!-- Variant Selection Modal -->
+        <div id="variantModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div class="card rounded-2xl p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto fade-in">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">Bobni tanlang</h2>
+                    <button onclick="closeModal('variantModal')" class="p-2 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-3" id="variantList">
+                    <!-- Will be populated -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Random Test Settings Modal -->
+        <div id="randomModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div class="card rounded-2xl p-6 w-full max-w-md fade-in">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">Test sozlamalari</h2>
+                    <button onclick="closeModal('randomModal')" class="p-2 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Savollar soni</label>
+                        <select id="questionCount" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary">
+                            <option value="10">10 ta savol</option>
+                            <option value="20">20 ta savol</option>
+                            <option value="30">30 ta savol</option>
+                            <option value="50">50 ta savol</option>
+                            <option value="100">100 ta savol</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Vaqt (daqiqa)</label>
+                        <select id="timeLimit" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary">
+                            <option value="0">Vaqt cheklovisiz</option>
+                            <option value="5">5 daqiqa</option>
+                            <option value="10">10 daqiqa</option>
+                            <option value="15">15 daqiqa</option>
+                            <option value="20">20 daqiqa</option>
+                            <option value="30">30 daqiqa</option>
+                            <option value="60">1 soat</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Bob (ixtiyoriy)</label>
+                        <select id="chapterSelect" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary">
+                            <option value="all">Barcha boblar</option>
+                        </select>
+                    </div>
+                    <button onclick="startRandomTest()" class="w-full btn-primary py-3 rounded-lg font-semibold">
+                        <i class="fas fa-play mr-2"></i>Testni boshlash
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group Test Modal -->
+        <div id="groupModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div class="card rounded-2xl p-6 w-full max-w-md fade-in">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">Guruh testi</h2>
+                    <button onclick="closeModal('groupModal')" class="p-2 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="createGroup()" class="card p-4 rounded-xl hover:shadow-lg transition text-center">
+                            <i class="fas fa-plus-circle text-3xl text-primary mb-2"></i>
+                            <p class="font-semibold">Guruh yaratish</p>
+                        </button>
+                        <button onclick="showJoinGroup()" class="card p-4 rounded-xl hover:shadow-lg transition text-center">
+                            <i class="fas fa-sign-in-alt text-3xl text-blue-500 mb-2"></i>
+                            <p class="font-semibold">Qo'shilish</p>
+                        </button>
+                    </div>
+                    <div id="groupCodeSection" class="hidden">
+                        <label class="block text-sm font-medium mb-2">Guruh kodi</label>
+                        <input type="text" id="groupCode" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary text-center text-2xl font-bold tracking-widest" maxlength="6" placeholder="ABC123">
+                        <button onclick="joinGroup()" class="w-full btn-primary py-3 rounded-lg font-semibold mt-4">
+                            <i class="fas fa-users mr-2"></i>Qo'shilish
+                        </button>
+                    </div>
+                    <div id="groupCreatedSection" class="hidden text-center">
+                        <p class="text-sm text-secondary mb-2">Guruh kodi:</p>
+                        <p id="createdGroupCode" class="text-4xl font-bold text-primary tracking-widest mb-4"></p>
+                        <p class="text-sm text-secondary mb-4">Bu kodni do'stlaringizga ulashing</p>
+                        <div id="groupMembers" class="text-left mb-4">
+                            <p class="font-semibold mb-2">Ishtirokchilar:</p>
+                            <div id="membersList" class="space-y-2"></div>
+                        </div>
+                        <button onclick="startGroupTest()" class="w-full btn-primary py-3 rounded-lg font-semibold">
+                            <i class="fas fa-play mr-2"></i>Testni boshlash
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Page -->
+        <div id="testPage" class="page hidden max-w-3xl mx-auto px-4 py-6">
+            <div class="card rounded-xl p-4 mb-6 fade-in">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-4">
+                        <button onclick="exitTest()" class="p-2 hover:bg-gray-100 rounded-lg">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div>
+                            <p class="font-semibold" id="testTitle">Test</p>
+                            <p class="text-sm text-secondary" id="testProgress">Savol 1/10</p>
+                        </div>
+                    </div>
+                    <div id="timerDisplay" class="hidden flex items-center gap-2 bg-red-100 text-red-600 px-4 py-2 rounded-lg font-bold">
+                        <i class="fas fa-clock"></i>
+                        <span id="timerText">00:00</span>
+                    </div>
+                </div>
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div id="progressBar" class="progress-bar h-full rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="card rounded-xl p-6 mb-6 fade-in">
+                <p class="text-lg font-medium mb-6" id="questionText"></p>
+                <div class="space-y-3" id="optionsContainer"></div>
+            </div>
+
+            <div class="flex justify-between gap-4">
+                <button id="prevBtn" onclick="prevQuestion()" class="flex-1 card py-3 rounded-lg font-semibold hover:shadow-lg transition disabled:opacity-50" disabled>
+                    <i class="fas fa-chevron-left mr-2"></i>Oldingi
+                </button>
+                <button id="nextBtn" onclick="nextQuestion()" class="flex-1 btn-primary py-3 rounded-lg font-semibold">
+                    Keyingi<i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div id="resultsPage" class="page hidden max-w-2xl mx-auto px-4 py-6">
+            <div class="card rounded-2xl p-8 text-center fade-in">
+                <div id="resultIcon" class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6"></div>
+                <h2 class="text-2xl font-bold mb-2" id="resultTitle"></h2>
+                <p class="text-secondary mb-6" id="resultSubtitle"></p>
+                
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="card rounded-xl p-4">
+                        <p class="text-3xl font-bold text-green-500" id="resultCorrect">0</p>
+                        <p class="text-sm text-secondary">To'g'ri</p>
+                    </div>
+                    <div class="card rounded-xl p-4">
+                        <p class="text-3xl font-bold text-red-500" id="resultWrong">0</p>
+                        <p class="text-sm text-secondary">Noto'g'ri</p>
+                    </div>
+                    <div class="card rounded-xl p-4">
+                        <p class="text-3xl font-bold text-primary" id="resultPercent">0%</p>
+                        <p class="text-sm text-secondary">Natija</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="reviewAnswers()" class="flex-1 card py-3 rounded-lg font-semibold hover:shadow-lg transition">
+                        <i class="fas fa-eye mr-2"></i>Javoblarni ko'rish
+                    </button>
+                    <button onclick="showPage('dashboard')" class="flex-1 btn-primary py-3 rounded-lg font-semibold">
+                        <i class="fas fa-home mr-2"></i>Bosh sahifa
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Page -->
+        <div id="reviewPage" class="page hidden max-w-3xl mx-auto px-4 py-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold">Javoblarni tahlil qilish</h2>
+                <button onclick="showPage('dashboard')" class="btn-primary px-4 py-2 rounded-lg">
+                    <i class="fas fa-home mr-2"></i>Bosh sahifa
+                </button>
+            </div>
+            <div id="reviewContainer" class="space-y-4"></div>
+        </div>
+
+        <!-- Leaderboard Page -->
+        <div id="leaderboardPage" class="page hidden max-w-3xl mx-auto px-4 py-6">
+            <h2 class="text-2xl font-bold mb-6 fade-in">🏆 Reyting jadvali</h2>
+            
+            <div class="card rounded-xl overflow-hidden fade-in">
+                <div class="p-4 bg-gradient-to-r from-green-500 to-green-600 text-white">
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold">Top ishtirokchilar</span>
+                        <select id="leaderboardPeriod" onchange="updateLeaderboard()" class="bg-white/20 rounded-lg px-3 py-1 text-sm">
+                            <option value="all">Barcha vaqt</option>
+                            <option value="week">Bu hafta</option>
+                            <option value="today">Bugun</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="leaderboardList" class="divide-y divide-gray-100"></div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profilePage" class="page hidden max-w-2xl mx-auto px-4 py-6">
+            <div class="card rounded-2xl p-6 mb-6 fade-in">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white text-2xl font-bold" id="profileAvatar">
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold" id="profileName"></h2>
+                        <p class="text-secondary" id="profileUsername"></p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-primary" id="profileTests">0</p>
+                        <p class="text-sm text-secondary">Ishlangan testlar</p>
+                    </div>
+                    <div class="card rounded-xl p-4 text-center">
+                        <p class="text-2xl font-bold text-green-500" id="profileAccuracy">0%</p>
+                        <p class="text-sm text-secondary">O'rtacha natija</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card rounded-xl p-6 fade-in">
+                <h3 class="font-bold mb-4">So'nggi natijalar</h3>
+                <div id="recentResults" class="space-y-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Questions Database
+        const allQuestions = [
+            // BOB 1 - Kirish
+            { chapter: 1, question: "Yer qobig'idagi barcha mavjudotlar tizimi ... deb ataladi.", options: ["biosfera", "mezosfera", "litosfera", "atmosfera"], correct: 0 },
+            { chapter: 1, question: "Ekologiya atamasini fanga birinchi marta kim kiritgan?", options: ["E.Gekkel", "V.I.Vernadskiy", "Ch.Darvin", "K.Myobius"], correct: 0 },
+            { chapter: 1, question: "Ekologiyaning predmeti nima?", options: ["Ekosistema", "Populyatsiya", "Mikroorganizmlar, hayvonlar va o'simliklarning turlari.", "Biosfera"], correct: 0 },
+            { chapter: 1, question: "Qaysi ibora autekologiya atamasining mohiyatini aks ettiradi?", options: ["Tur vakillari ekologiyasi", "populyatsiyalar ekologiyasi", "turlarning ekologiyasi", "jamoalar ekologiyasi"], correct: 0 },
+            { chapter: 1, question: "Sinekologiya ..… ni o'rganadi.", options: ["jamoalar ekologiyasi", "turlarning ekologiyasi", "mikroorganizmlar ekologiyasi", "yerdagi global jarayonlar"], correct: 0 },
+            { chapter: 1, question: "Ilk bor fanga \"Ekologiya\" so'zini kim olib kirgan?", options: ["Ernest Gekkel", "Albert Eynshteyn", "Charvlz Darvin", "Karl Linney"], correct: 0 },
+            { chapter: 1, question: "Demografik portlashning asosiy sababi:", options: ["Ovqatlanish va sanitariya gigiyena sharoitlarini yaxshilanishi", "Tug'ilishning ko'pligi", "Xotin-qizlarni ko'payishi", "Sanoat inqilobi"], correct: 0 },
+            { chapter: 1, question: "\"Tabiatni muhofaza qilish to'g'rsidagi\" qonun qachon qabul qilingan?", options: ["1992 yil 9 dekabr", "1993 yil 9 dekabr", "1993 yil 8 dekabr", "1994 yil 9-dekabr"], correct: 0 },
+            { chapter: 1, question: "Ekologik muammolar ko'lamiga ko'ra necha guruhga bo'linadi?", options: ["3 ta", "4 ta", "2 ta", "5 ta"], correct: 0 },
+            { chapter: 1, question: "Ekologiya fani nimani o'rganadi?", options: ["tirik organizmlarning yashash sharoiti va ularning o'zi yashab turgan muhit bilan o'zaro murakkab munosabatlari, hamda shu asosda vujudga keladigan qonuniyatlarni o'rganadi", "tirik organizmlarni o'rganadi", "tabiatga salbiy ta'sir xususiyatlarini o'rganadi", "tirik organizmlarning yashash sharoiti va shu asosda vujudga keladigan qonuniyatlarni o'rganadi"], correct: 0 },
+            { chapter: 1, question: "Ekologiyaning tirik organizmlar turlarini o'rganuvchi bo'limi … deyiladi.", options: ["Eydekologiya", "Sinekologiya", "Demekologiya", "Autekologiya"], correct: 0 },
+            { chapter: 1, question: "\"Asrlar tutash kelgan pallada butun insoniyat, mamlakatimiz aholisi juda katta ekologik xavfga duch kelib qoldi\" fikrni kim aytgan?", options: ["I.A.Karimov", "Sh.M.Mirziyoyev", "Abu Ali ibn Sino", "Abu Rayxon Beruniy"], correct: 0 },
+            { chapter: 1, question: "\"Ekologiya va atrof-muhitni muhofaza qilish sohasida davlat boshqaruvi tizimini takomillashtirish to'g'risida\"gi PF-5024 sonli Farmoni qachon qabul qilindi?", options: ["2017 yil 21-aprelda", "2017 yil 25 iyunda", "2018 yil 24-aprelda", "2018 yil 21-dekabrda"], correct: 0 },
+            { chapter: 1, question: "Ekologiya fanining predmeti:", options: ["Organizmlar va muhit o'rtasidagi o'zaro aloqadorliklar majmui yoki tuzilmasi", "Insonning tabiatga ta'siri", "Tiriklikni tuzilishi, rivojlanishi, miqdori", "Organizmlar va ularning bioxilma-xilligi"], correct: 0 },
+            { chapter: 1, question: "Ekologiyaning asosiy ob'yekti:", options: ["Tirik organizmlar va ularni yashash muhiti bilan hosil qilgan tabiiy majmualar- ekotizimlar", "Biologik turlar", "Jonsiz tabiat komponentlari", "Turlar, populyatsiyalar, biotik jamoalar, biosfera"], correct: 0 },
+            { chapter: 1, question: "Quyidagilardan qaysi biri atrof-muhit ifloslanishiga taalluqli emas?", options: ["Informatsion", "Radioaktiv", "Kimyoviy", "Biologik"], correct: 0 },
+            { chapter: 1, question: "Umumiy ekologiya–... rivojlana boshladi.", options: ["biologiya fanining bir bo'lagi bo'lsa-da, ammo botanika, zoologiya nisbatan yangi fan bo'lib, u XX-asrning boshlarida", "botanika fanining bir bo'lagi bo'lsa-da, ammo botanika, zoologiyaga nisbatan yangi fan bo'lib, u XIX-asrning boshlarida", "biologiya fanining bir bo'lagi bo'lsa-da, ammo botanika, zoologiya nisbatan yangi fan bo'lib, u XX-asrning o'rtalarida", "zoologiya fanining bir bo'lagi bo'lsa-da, ammo botanika, zoologiyaga nisbatan yangi fan bo'lib, u XX-asrning o'rtalarida"], correct: 0 },
+            { chapter: 1, question: "Jamiyat va tabiat o'rtasidagi munosabatlarning buzilishi qanday oqibatlarga olib keladi?", options: ["Ekologik tanglik, ekologik halokat, ekologik inqirozga", "Organizmlami muhitlarga moslashishiga", "Urushlarga", "Jonsiz tabiatning tanazzuliga"], correct: 0 },
+            { chapter: 1, question: "\"Atrof-muhit\" tushunchasini kim fanga kiradi?", options: ["Ya.Yuksol", "V.Gorner", "D.Prisli", "A.Tensli"], correct: 0 },
+            { chapter: 1, question: "Organizmlarning bir-biri va ularning atrof-muhit bilan o'zaro ta'siri haqidagi fan:", options: ["ekologiya", "biologiya", "gistologiya", "ornitologiya"], correct: 0 },
+            
+            // BOB 2 - Muhit tushunchasi
+            { chapter: 2, question: "Yashash muhitining alohida elementlari - bu …", options: ["ekologik omillar", "biotsenoz", "yashash muhiti", "biogeotsenoz"], correct: 0 },
+            { chapter: 2, question: "Tirik organizmlar faoliyati bilan bog'liq omillar ….. deyiladi", options: ["biotik omillar", "antropogen omillar", "abiotik omillar", "ekologik omillar"], correct: 0 },
+            { chapter: 2, question: "Muhitning barcha omillari necha guruhga bo'linadi va ular qaysilar?", options: ["3 ga: biotik, abiotik, antropogen", "2 ga: abiotik va antropogen", "2 ga: biotik va antropogen", "2 ga bo'linadi: tropik, subtropik"], correct: 0 },
+            { chapter: 2, question: "Abiotik omillar deb nimaga aytiladi?", options: ["Organizmga ta'sir qiladigan abiotik muhitning majmui", "Inson hayotiy faoliyatining organik dunyoga ta'siri", "Muhitda uchraydigan hayot faoliyati, bir-birlariga qiladigan ta'siri va ular orasidagi munosabatlar", "Radiatsiyaning tirik organizmga ta'siri"], correct: 0 },
+            { chapter: 2, question: "Organizmlarga ta'sir qiluvchi jonsiz tabiatning tarkibiy qismlari qanday nomlanadi?", options: ["abiotik omillar", "biotik omillar", "zoogen omillar", "antropogen omillar"], correct: 0 },
+            { chapter: 2, question: "Yashash muhitiga moslashish natijasida tananing tuzilishidagi o'zgarishlar … deyiladi.", options: ["morfologik moslashuvlar", "etologik moslashuvlar", "fiziologik moslashuvlar", "biokimyoviy moslashuvlar"], correct: 0 },
+            { chapter: 2, question: "Faqat yaxshi yorug'lik sharoitida o'sishi mumkin bo'lgan o'simliklarga ….. deyiladi.", options: ["geliofitlar", "fotofillar", "sciofitlar", "fakultativ geliofitlar"], correct: 0 },
+            { chapter: 2, question: "Abiotik yashash muhitining o'ziga xos omillari bo'lgan ma'lum bir hudud (iqlim, tuproq, suv)… deyiladi.", options: ["biotop", "bioton", "biogeotsenoz", "ekotizim"], correct: 0 },
+            { chapter: 2, question: "Ekologiyada suv muhitida yashovchi organizmlar nima deyiladi?", options: ["Gidrobiontlar", "Geobiontlar", "aerobiontlar", "Konsumentlar"], correct: 0 },
+            { chapter: 2, question: "Hayvonlarning yorug'lik chiqarish, nur sochish qobiliyati nima deyiladi?", options: ["Biolyuminessensiya", "Fototropizm", "Fotoperiodizm", "Fotoperiodizm, fototropizm, biolyuminessensiya"], correct: 0 },
+            { chapter: 2, question: "Kserofitlar guruhiga kiruvchi o'simliklar qayerlarda keng tarqalgan?", options: ["Chala cho'llar va cho'llar", "Tog'lar va dashtlar", "Cho'llar va to'qaylarda", "To'qaylarda"], correct: 0 },
+            { chapter: 2, question: "Tanasidagi suvning 75% ini yo'qotsa ham so'limasdan hayot faoliyatini davom ettiruvchi o'simliklar qaysi guruhga kiradi?", options: ["Sklerofitlar", "Mezofitlar", "Sukkulentlar", "Psixrofitlar"], correct: 0 },
+            { chapter: 2, question: "Organizm uchun optimal harorat necha °C ni tashkil etadi?", options: ["20-23 °C", "18-23 °C", "20-22 °C", "17-23 °C"], correct: 0 },
+            { chapter: 2, question: "Muhit bu…", options: ["Organizmni o'rab turgan hamma tabiiy ekologik omillar", "Element va voqelikdan tashkil topgan", "Yashash muhiti", "Ekologik ob'yekt"], correct: 0 },
+            { chapter: 2, question: "Yorug'likka nisbatan o'simliklar nechta guruhga bo'linadi?", options: ["3 ta", "7 ta", "5 ta", "8 ta"], correct: 0 },
+            { chapter: 2, question: "Suv qatlamida faol suzib yuradigan organizmlar yig'indisiga nima deb ataladi?", options: ["Nektonlar", "Planktonlar", "Neystonlar", "Bentoslar"], correct: 0 },
+            { chapter: 2, question: "Omilning qulay ta'sir etuvchi kuchi nima deyiladi?", options: ["Optimum ta'sir", "Maksimum ta'sir", "Minimum ta'sir", "Pessimum nuqtasi"], correct: 0 },
+            { chapter: 2, question: "Qurg'oqchilikka chidamli, ko'p yillik dag'al ko'pincha barglari reduksiyalashgan va tikanlarga aylangan qalin kutikula qavatiga ega bo'lgan o'simliklar… deyiladi.", options: ["Sklerofitlar", "Mezofitlar", "Sukkulentlar", "Gidrofitlar"], correct: 0 },
+            { chapter: 2, question: "Abiotik omillar guruhini ajrating?", options: ["Yorug'lik, namlik, harorat", "Rel'ef, o'simlik ta'siri", "Hayvon, tuproq ta'siri", "Inson ta'siri"], correct: 0 },
+            { chapter: 2, question: "Turlarning u yoki bu muhit omillarining o'zgarib turish doirasiga moslashish xususiyati nima deyiladi?", options: ["Valentlik", "Chidamlilik", "Adaptatsiya", "Amplituda"], correct: 0 },
+            { chapter: 2, question: "Yashash sharoiti deganda nimani tushunasiz?", options: ["Organizmlar uchun kerak omillar yig'indisi bor joy", "Tirik organizmlar moslashib yashaydigan joy", "Ekologik ob'ekt va sub'ekt o'rtasidagi o'zaro muhit", "Tabiiy kuch va voqelikni yig'indisi"], correct: 0 },
+            { chapter: 2, question: "Ekologik omillar ta'siriga chidamli organizmlar guruhini ajrating.", options: ["evribiont", "stenobiont", "evrigalin", "stenogalin"], correct: 0 },
+            { chapter: 2, question: "Hayvonlar harorat omiliga moslanish darajasiga qarab qanday guruhlarga bo'linadi?", options: ["Poykiloterm, gomoyoterm", "Poykiloterm, stenoterm", "Evriterm, stenoterm", "Gomoyoterm, evriterm"], correct: 0 },
+            { chapter: 2, question: "Antropogen omillar:", options: ["inson faoliyatining tabiatga ta'siri", "organizmlarning insonga ta'siri", "tirik organizm uchun eng qulay omillar", "tirik organizmlarning tabiatga va o'zaro ta'siri"], correct: 0 },
+            { chapter: 2, question: "Ekotop nima?", options: ["Biogeotsenozning abiotik qismi", "Ekologik omil", "Biotsenozning bir bo'lagi", "Odamlarning yashash joyi"], correct: 0 },
+            { chapter: 2, question: "Atrof-muhit omillarining o'zgarishiga javoban organizmning xatti-harakatlaridagi o'zgarishlarga nima deyiladi?", options: ["Etologik moslashish", "Fiziologik moslashish", "Morfologik moslashish", "Biokimyoviy moslashish"], correct: 0 },
+            { chapter: 2, question: "Fotosintez yoki xemosintez yordamida noorganik tarkibiy qismlardan organik moddalar ishlab chiqarishga qodir avtotrof organizmlar …. deyiladi.", options: ["Produtsentlar", "Konsumentlar", "Redutsentlar", "Xemotroflar"], correct: 0 },
+            { chapter: 2, question: "Yashash muhiti deb, … aytiladi:", options: ["tabiatning bir —biriga ta'sir qiluvchi tirik mavjudotlar bilan qoplangan qismiga", "tuproqning tirik mavjudotlar bilan qoplangan qismiga", "tabiatning bir —biriga ta'sir qiluvchi qismiga", "tabiatning bir qismiga"], correct: 0 },
+            { chapter: 2, question: "Biotik omillar – ... ifodalaydi:", options: ["Jonli (organik) muhitning tirik organizmga ta'sir shakllarini", "Jonsiz muhitning tirik organizmga ta'sir shakllarini", "Inson faoliyatini", "O'simlik va hayvonot olamini"], correct: 0 },
+            { chapter: 2, question: "Abiotik omillar majmuini ko'rsating?", options: ["Iqlim, tuproq, relyef", "Edafik, fitogen, biotik", "Mikrobiogen, zoogen, relyef", "Fiogen, zoogen, mikrobiogen"], correct: 0 },
+            { chapter: 2, question: "Hayvonlar hayotida yorug'likning ahamiyati nimada?", options: ["Fazoda mo'ljal olish, harakatlanish, oziqlanish", "Populyatsiya sonini boshqarish", "Tana haroratini boshqarish", "Ko'payish"], correct: 0 },
+            { chapter: 2, question: "O'simliklarning namlik omiliga ko'ra ekologik guruhlari?", options: ["Gidrofitlar, gigrofitlar, mezofitlar, kserofitlar", "Sukkulentlar, kalsifitlar, gidrofitlar", "Gidatofitlar, psammofitlar, mezofitlar", "Gidrofit, galofitlar, mezofitlar"], correct: 0 },
+            { chapter: 2, question: "O'simliklarning yorug'likka munosabatiga ko'ra qaysi guruhlarga bo'linadi?", options: ["Geliofit, stsiofit, fakultativ geliofit", "Gomoyoterm, poykiloterm", "Mezofit, termofit, kriofit", "Gidrofit, kserofit, gigrofit"], correct: 0 },
+            { chapter: 2, question: "Hayvonlar haroratga munosabatiga ko'ra nech guruhga bo'linadi?", options: ["Sovuqqonli, issiqqonli, geteroterm", "Termofil, kriofil, mezofil", "Gidrofil, kserofil, mezoterm", "Fotofil, fotofob"], correct: 0 },
+            { chapter: 2, question: "Quyidagilardan qaysi birining tanasining 90% suvdan iborat?", options: ["Gidatofit", "Gigrofit", "Gidrofit", "Mezofit"], correct: 0 },
+            { chapter: 2, question: "O'simliklarning barglarida noorganik moddalardan organik moddalarni sintez qilish jarayoni qanday nomlanadi?", options: ["Fotosintez", "Fotonastiya", "Fototropizm", "Fotoperiodizm"], correct: 0 },
+            { chapter: 2, question: "Uzun kunli o'simliklar yer sharining qaysi qismida o'sadi?", options: ["Shimolda", "G'arbda", "Janubda", "Sharqda"], correct: 0 },
+            { chapter: 2, question: "Qisqa kunli o'simliklar deb nimaga aytiladi?", options: ["Gullash fazasi o'tish uchun sutkasiga 8 - 12 soat yoruglik talab qiluvchi o'simliklar", "Barcha javob to'g'ri", "Gullash fazasi o'tish uchun sutkasiga 12 - 16 soat yoruglik talab qiluvchi o'simliklar", "Kun uzunligiga befarq o'simliklar"], correct: 0 },
+            { chapter: 2, question: "Qanday yashash muhitlari bor?", options: ["Quruqlik - havo, suv, tuproq, tirik organizmlar", "Suv, havo, inson", "Hayvonlar va o'simliklar, tuproq", "Quruqlik, havo, suv, tuproq"], correct: 0 },
+            { chapter: 2, question: "Tirik organizimlarga ta'sir ko'rsatuvchi barcha tashqi ta'sirlar nima deyiladi?", options: ["Ekologik omil", "Biotik omil", "Abiotik omil", "Geologik omil"], correct: 0 },
+            
+            // BOB 3 - Populyatsiyalar ekologiyasi
+            { chapter: 3, question: "Populyatsiya so'zining ma'nosi nimani anglatadi?", options: ["Xalq, aholi", "Uy, joy", "To'da, poda", "Guruh"], correct: 0 },
+            { chapter: 3, question: "Har qanday funktsiyani bajarishni osonlashtiradigan hayvonlarning vaqtincha birlashishi ..…deyiladi.", options: ["gala", "koloniya", "poda", "oilaviy turmush tarzi"], correct: 0 },
+            { chapter: 3, question: "Turli xil tirik organizmlar ma'lum bir hududda yashashiga nima deyiladi?", options: ["biotsenoz", "fitotsenoz", "zootsenoz", "mikrobiotsenoz"], correct: 0 },
+            { chapter: 3, question: "Ikkala populyatsiya uchun ham foydali bo'lgan, ammo majburiy bo'lmagan turlarning o'zaro ta'siri qanday nomlanadi?", options: ["protokooperatsiya", "mutualizm", "neytralizm", "amensalizm"], correct: 0 },
+            { chapter: 3, question: "Ozuqa zanjiri bu…", options: ["Har bir organizm o'zidan keyingi turgan organizm uchun ozuqa bo'lib xizmat qilishi", "Har bir organizm o'zidan oldinda turgan organizm uchun ozuqa bo'lib xizmat qilishi", "Har bir organizm o'zi uchun xizmat qilishi", "Bir turning ikkinchi tur tomonidan yo'q qilinishi"], correct: 0 },
+            { chapter: 3, question: "Bir organizm ajratgan zaharli moddaning ikkinchi organizmga ta'sir etishi qanday hodisa hisoblanadi?", options: ["Antibioz", "Neytral", "Parazitlik", "Mutualizm"], correct: 0 },
+            { chapter: 3, question: "Parazitlar nechta guruhga bo'linadi?", options: ["2 guruhga", "3 guruhga", "4 guruhga", "5 guruhga"], correct: 0 },
+            { chapter: 3, question: "Doimiy tana temperaturasiga ega hayvonlar nima deyiladi", options: ["Gomoyoterm", "Geteroterm", "Poykiloterm", "Mezoterm"], correct: 0 },
+            { chapter: 3, question: "Bir turning ikkinchi tur tomonidan yo'q qilinishi yoki yeb qo'yilishi qanday biotik munosabat turi hisoblanadi?", options: ["Yirtqichlik", "Mutualizm", "Parazitizm", "Raqobat"], correct: 0 },
+            { chapter: 3, question: "Hayvonlarni konsumentlar deyilishi nimani anglatadi?", options: ["Tayyor organik moddani o'zlashtirishi", "Organik moddani parchalashi", "Organik moddani hosil qilishi", "Ozuqa zanjiridagi o'rnini"], correct: 0 },
+            { chapter: 3, question: "Populyasiyalar ekologiyasiga kim tomondan va qachon asos solingan?", options: ["1930 yil, Ch.Elton", "1926 yil, Vernadskiy", "1877 yil, K.Myobius", "1903 yil, Iyogansen"], correct: 0 },
+            { chapter: 3, question: "Qaysi qatorda populyatsiyaning asosiy ko'rsatkichlari keltirilgan?", options: ["Zichligi, soni, tug'ilish, o'lish, o'sish sur'ati", "Populyatsiyaning biologik va guruhlilik xususiyatlari", "Populyatsiya dinamikasi va gomeostazi", "Yosh, jins, fazoviy, etologik tuzilmalari"], correct: 0 },
+            { chapter: 3, question: "Biotsenozda ikklala organizm uchun foydali bo'lgan munosabat turi nima deyiladi?", options: ["Mutualizm", "Neytralizm", "Yurtqichlik", "Raqobat"], correct: 0 },
+            { chapter: 3, question: "Yirtqichlar uchun xarakterli holat bu maxsus ........xulq atvoridir.", options: ["Ovlash", "Tekinxo'rlik", "Yirtqichlilik", "Parazitizm"], correct: 0 },
+            { chapter: 3, question: "Bir xil hududda yashovchi bir xil turdagi individlar guruhi …deyiladi.", options: ["Populyatsiya", "Ekotizim", "Biosfera", "Biotsenoz"], correct: 0 },
+            { chapter: 3, question: "Uzoq vaqt davomida bir arealda mavjud bo'lgan, o'z-o'zini ko'paytirishga qodir bo'lgan bir xil turdagi individlarning to'plami nima deyiladi?", options: ["Populyatsiya", "biogeotsenoz", "Biotsenoz", "Ekosistema"], correct: 0 },
+            { chapter: 3, question: "Har qanday funktsiyani bajarishni osonlashtiradigan hayvonlarning vaqtinchalik birlashmasiga nima deyiladi?", options: ["Gala, to'da, poda", "Xulqiy moslashuv", "Yashash tarzi", "Migratsiya"], correct: 0 },
+            { chapter: 3, question: "Quyidagilardan qaysi biri populyatiyaning o'ziga xos xususiyatlarini namoyon etadi?", options: ["Guruhlilik, biologik", "Morfologik, fiziologik", "Yosh, jins, fazoviy", "Soni, zichligi, o'sish sur'ati"], correct: 0 },
+            { chapter: 3, question: "Berilgan ozuqa zanjirida qaysi bo'g'in qoldirib ketilgan? Bug'doy > sichqon > ….. > burgut", options: ["Ilon", "Laylak", "Tulki", "Boyqush"], correct: 0 },
+            { chapter: 3, question: "Hayvonlaming birgalikda hayot kechirish shakllari?", options: ["Oila, koloniya, poda, gala", "Guruhli, parazit, xo'jayin", "Immigratsiya, qirilish", "Mikoriza, simbioz"], correct: 0 },
+            { chapter: 3, question: "Ozuqa zanjiri deganda nimani tushunasiz?", options: ["Har bir organizmni o'zidan keyin turgan organizm uchun ozuqa bo'lib xizmat qilishi tushuniladi", "Ozuqa zanjiridagi organizmlaming bir-biriga munosabati", "Organizmlaming ayrim bo'g'inlami hosil qilishi", "Anorganik moddalaming organik moddalarga aylanishi"], correct: 0 },
+            { chapter: 3, question: "Ekologik piramida kim tomonidan tuzilgan?", options: ["Ch. Elton", "D. N. Kashkarov", "Y. P. Korovin", "A. Seversov"], correct: 0 },
+            { chapter: 3, question: "Agroekotizimlar qatorini belgilang.", options: ["Bedazor, paxtazor, poliz ekinlari", "Akvarium, xovuz, bug'doyzor", "Issiqxona, o'rmon, tog'", "Cho'l, mevazor, to'qayzor"], correct: 0 },
+            { chapter: 3, question: "Kannibalizm deb nimaga aytiladi?", options: ["Tabiatda bir tur shu tur vakillarini yeyishiga", "2 tur birgalikda yashab, bir-biriga salbiy ta'sir ko'rsatishiga", "Bir joyda yashaydigan ikki tur o'rtasidagi munosabat turiga", "Ikki turning birgalikda yashashi va foyda ko'rishiga"], correct: 0 },
+            { chapter: 3, question: "Individlarning jinsiy moyilligi va ota – onalar bilan yangi avlod o'rtasidagi bog'lanishlar natijasida kelib chiqadigan hayvonlarning birgalikda yashash shakliga ..... deb aytiladi.", options: ["Oila", "Koloniya", "Gala", "Poda"], correct: 0 },
+            { chapter: 3, question: "Sinekologiya nimani o'rganadi?", options: ["Jamoalar bilan tashqi muhit munosabatini", "Turlar bilan tashqi muhit munosabatini", "Tur vakillari bilan tashqi muhit munosabatini", "Populyatsiyalar bilan tashqi muhit munosabatini"], correct: 0 },
+            
+            // BOB 4 - Biotsenoz va Ekosistemalar
+            { chapter: 4, question: "Fotosintez yoki xemosintez yordamida noorganik komponentlardan organik moddalar ishlab chiqarishga qodir avtotrof organizmlar nima deyiladi?", options: ["produtsentlar", "geterotroflar", "konsumentlar", "redutsentlar"], correct: 0 },
+            { chapter: 4, question: "\"Ekotizim\" atamasi 1935 yilda qaysi olim tomonidan taklif qilingan?", options: ["A. Tensli", "V. I. Vernadskiy", "V. N. Sukachev tomonidan", "G. F. Gauze"], correct: 0 },
+            { chapter: 4, question: "O'simliklar tomonidan to'plangan organik moddalarni iste'mol qiluvchilar…", options: ["Konsumentlar", "Geterotroflar", "Produtsentlar", "Redutsentlar"], correct: 0 },
+            { chapter: 4, question: "Biotsenoz atamasini fanga birinchi bo'lib kim kiritgan?", options: ["K.Myobius", "K.Linney", "E.Zyuss", "A.Tensli"], correct: 0 },
+            { chapter: 4, question: "Suktsessiya nima?", options: ["Jamoalarning kelib chiqishi va almashinishi", "Jamoalarda energiyaning o'zgarishi", "Jamoalarning tashqi muhit bilan almashinishi", "Biologik moddalaning aylanishi"], correct: 0 },
+            { chapter: 4, question: "Biotsenoz bu .......", options: ["Umumiy bo'lib yashash tarzi", "Jamoa yashash tarzi", "Yakka holda yashash tarzi", "Guruh bo'lib yashash tarzi"], correct: 0 },
+            { chapter: 4, question: "Inson faoliyati natijasida paydo bo'ladigan ekosistemalar nima deb yuritiladi?", options: ["Agroekosistema", "Geosistema", "Agrotsenoz", "Biotsenoz"], correct: 0 },
+            { chapter: 4, question: "Modda va energiyani iste'mol qilish jarayoni ….. deyiladi.", options: ["Ovqatlanish", "Katabolizm", "Anabolizm", "Metabolizm"], correct: 0 },
+            { chapter: 4, question: "Fotosintez jarayonida quyidagilar hosil bo'ladi:", options: ["Uglevodlar va kislorod", "Aminokislotalar va kislorod", "Uglevodlar va suv", "Aminokislotalar va suv"], correct: 0 },
+            { chapter: 4, question: "Muayyan hududda yashovchi turli xil tirik organizmlar populyatsiyalari yig'indisi nima deb ataladi?", options: ["Biotsenoz", "Biom", "Ekosistema", "Populyatsiya"], correct: 0 },
+            { chapter: 4, question: "Ekologiyaning jamoalar tuzilishi energetikasi, dinamikasi, shakllanishi tashqi muhit bilan o'zaro aloqasini o'rganadigan bo'lim…. deyiladi.", options: ["Sinekologiya", "Autekologiya", "Demekologiya", "Eydekologiya"], correct: 0 },
+            { chapter: 4, question: "Kim biogeotsenozlar haqidagi tasavvurni asoslab berdi?", options: ["V. N. Sukachev", "K. Myobius", "G. F. Morozov", "A. F. Middendorf"], correct: 0 },
+            { chapter: 4, question: "Biotsenozdagi ikkala organizm uchun keskin bo'lgan munosabat?", options: ["Raqobat", "Neytralizm", "Parazitlik", "Mutualizm"], correct: 0 },
+            { chapter: 4, question: "Biotsenoz egallagan joy qanday ataladi?", options: ["Biotop", "Ekotop", "Klimatatop", "Edafotop"], correct: 0 },
+            { chapter: 4, question: "Ozuqa zanjirining necha turi mavjud?", options: ["2", "1", "3", "4"], correct: 0 },
+            { chapter: 4, question: "Organik moddalarni iste'mol qilib, mineral moddagacha parchalaydigan organizmlar guruhi qanday nomlanadi?", options: ["Redutsentlar", "Konsumentlar", "Produtsentlar", "Geterotroflar"], correct: 0 },
+            
+            // BOB 5 - Atmosfera va Biosfera
+            { chapter: 5, question: "Maqsadli ravishda inson tomonidan yaratilgan jamoaning nomi … deyiladi.", options: ["agrotsenoz", "biotsenoz", "geobiosenoz", "biosfera"], correct: 0 },
+            { chapter: 5, question: "Atmosferadagi toza va quruq havoda necha foiz azot va necha foiz kislorod bo'ladi?", options: ["N2 - 78,1%, O2 - 21%", "N2 - 80%, O2 - 19%", "N2 - 75%, O2 - 22%", "N2 - 76%, O2 - 20%"], correct: 0 },
+            { chapter: 5, question: "Atmosferadagi tutun, tuman va changli zaharli aralashmalar nima deb yuritiladi?", options: ["Fotokimyoviy smog", "Kislotali yomg'ir", "Issiqxona effekti", "Ozon tuynuklari"], correct: 0 },
+            { chapter: 5, question: "Atmosfera havosining kimyoviy tarkibiga nimalar kiradi?", options: ["Azot, kislorod, karbonat angidrid, inert gazlar oltingugurt", "Karbonat angidrid, kislorod", "Ozon ekrani, kislorod, vodorod", "Azot, vodorod, kislorod, oltingugurt oksidi"], correct: 0 },
+            { chapter: 5, question: "1992-yil 9-dekabrda O'zbekiston Respublikasi Oliy Majlisi tomonidan qanday qonun qabul qilingan?", options: ["Tabiatni muhofaza qilish to'g'risidagi qonun", "Yer resurslarini muhofaza qilish to'g'risidagi qonun", "Suv resurslarini muhofaza qilish to'g'risidagi qonun", "Atmosferani muhofaza qilish to'g'risidagi qonun"], correct: 0 },
+            { chapter: 5, question: "Biosfera ta'limotining asoschisi kim?", options: ["V.I.Vernadskiy", "S.I.Vavilov", "K.A.Timiryazev", "V.L.Sukachev"], correct: 0 },
+            { chapter: 5, question: "Biosferadagi tirik moddalarning umumiy massasi … deyiladi.", options: ["biomassa", "nabotot", "ekotizim", "tabiat"], correct: 0 },
+            { chapter: 5, question: "Biota bu - ….", options: ["Barcha tirik organizmlar yig'indisi", "Organizmlarning hayot faoliyati", "Tashqi muhit", "Atrof - muhit"], correct: 0 },
+            { chapter: 5, question: "Biosferaning tarkibiy qismlari qaysi variantda to'g'ri ko'rsatilgan?", options: ["tirik modda(biota), biogen moddalar, o'lik moddalar, oraliq moddalar", "tirik modda(biota)lar, oraliq modda, o'lik modda", "o'lik moddalar, oraliq moddalar", "oraliq moddalar, tirik moddalar"], correct: 0 },
+            { chapter: 5, question: "Biosfera mahsuldorligining kamayishiga qanday jarayonlar sabab bo'ladi?", options: ["Barchasi to'g'ri", "Gidromelioratsiya ishlarini amalga oshirish", "Sanoat chiqindilari bilan muhitning ifloslanishi", "Oqova va sizot suvlari, tuproqning turli mineral o'g'itlar bilan ifloslanishi"], correct: 0 },
+            { chapter: 5, question: "Tabiiy resurslar – … dirlar.", options: ["insonlarning yashash vositalari bo'lib, ular inson mehnati bilan yaratilmagan, aksincha unga bog'liq bo'lmagan holda ob'yektiv ravishda mavjud", "insonlarning yashash vositalari bo'lib, ular inson mehnati bilan yaratilgan", "inson mehnati bilan yaratilmagan juda kam miqdorda mavjud", "insonlarning yashash vositalari bo'lib, ob'yektiv ravishda mavjud"], correct: 0 },
+            { chapter: 5, question: "Atmosfera hajmini eng ko'p tashkil etuvchi gaz qaysi variantda to'g'ri ko'rsatilgan?", options: ["Azot", "Geliy", "Kislorod", "Argon"], correct: 0 },
+            { chapter: 5, question: "Atmosfera qatlamlari qaysi variantda to'g'ri ko'rsatilgan?", options: ["Troposfera, Stratosfera, Mezosfera, Termosfera, Ekzosfera", "Troposfera, Stratosfera, Litosfera, Termosfera, Ekzosfera", "Ekzosfera, Gidrosfera, Troposfera, Stratosfera, Biosfera", "Termosfera, Ekzosfera, Gidrosfera, Troposfera, Stratosfera"], correct: 0 },
+            { chapter: 5, question: "Ba'zi hollarda termosfera va ekzosferalarni yuqori haroratli holda bo'lganliklari uchun … – deb ham ataladi.", options: ["Ionosfera", "Stratopauza", "Mezopauza", "Tropopauza"], correct: 0 },
+            { chapter: 5, question: "… – antropogen ifloslanish deyiladi.", options: ["Atmosfera inson xo'jalik faoliyati ta'sirida (sun'iy) ifloslansa", "Atmosfera inson xo'jalik faoliyati ta'sirida (sun'iy) ifloslanmasa", "Atmosfera insonning aralashuvisiz (tabiiy) ifloslansa", "Atmosfera antitsiklonlarning harakati ta'sirida (tabiiy) ifloslansa"], correct: 0 },
+            { chapter: 5, question: "Ozon qatlamining yemiruvchi moddalar qaysi variantda to'g'ri ko'rsatilgan?", options: ["Tarkibida xlor, ftor, brom, uglerod va vodorod bo'lgan kimyoviy moddalar", "Tarkibida xlor, ftor, brom, uglerod va vodorod kabi kimyoviy unsurlar bo'lmagan moddalar", "Qishloq xo'jalidan chiqayotgan chiqindilar", "Sanoat korxonalaridan chiqayotgan chiqindilar"], correct: 0 },
+            { chapter: 5, question: "Ultrabinafsha to'lqinlarinig … masofada joylashgan qismi UB-A deb nomlanadi.", options: ["400 dan 320 mm gacha", "450 dan 360 mm gacha", "500 dan 420 mm gacha", "600 dan 800 mm gacha"], correct: 0 },
+            { chapter: 5, question: "UB-A odamga, ayniqsa o'sish paytida, zarur, chunki u immunitetni oshiradi, … hosil bo'lishida yordam beradi.", options: ["D vitamini", "A vitamini", "B vitamini", "E vitamini"], correct: 0 },
+            { chapter: 5, question: "Tirik organizmlarni yoq qiluvchi nurlanish qaysi variantda to'g'ri ko'rsatilgan?", options: ["UB-A va UB-C", "UB-A", "UB-B", "Bunday nurlanish mavjud emas"], correct: 0 },
+            { chapter: 5, question: "Eng yuksak energetik xususiyatga ega bo'lgan nurlanish qaysi variantda to'g'ri ko'rsatilgan?", options: ["UB-C", "UB-A va UB-C", "UB-A va UB-B", "Bunday nurlanish mavjud emas"], correct: 0 },
+            { chapter: 5, question: "Qattiq, suyuq va gazsimon chiqindi moddalar havoning tabiiy tarkibini o'zgartirib yuborishi - … deyiladi.", options: ["Atmosferaning ifloslanishi", "Litosferaning ifloslanishi", "Biosferaning ifloslanishi", "Gidrosferaning ifloslanishi"], correct: 0 },
+            { chapter: 5, question: "Ozon qatlamining yemirilish sabablari:", options: ["Xlorftormetan (freonlar) birikmalar", "Ultrabinafsha nurlar", "Zavod va fabrikalardan chiqadigan uglerod oksidlar", "Avtotransportlardan chiqadigan gazlar"], correct: 0 },
+            { chapter: 5, question: "Quyidagilardan qaysilari \"Kislotali yomg'irlar\"ga sabab bo'ladi?", options: ["N2O, SO2, SO3", "SO3, CH4, H2O", "H2O, CH4, CO2", "P2O5, NH3"], correct: 0 },
+            { chapter: 5, question: "Biosfera moddalari to'g'ri keltirilgan qatorni ko'rsating.", options: ["Tirik, o'lik, oraliq, biogen", "Produtsent, konsument, redutsent", "Radioaktiv, kimyoviy, biologik", "Biogen, oraliq, kimyoviy"], correct: 0 },
+            { chapter: 5, question: "Biosferada tirik moddalarning yuzaga kelishi bilan atmosfera, suv va mineral moddalarning aylanishiga nima deyiladi?", options: ["Biogeokimyoviy aylanish", "Gazlar aylanishi", "Kichik biologik aylanish", "Geologik aylanish"], correct: 0 },
+            { chapter: 5, question: "\"Biosfera\" atamasini birinchi marta qaysi olim fanga kiritgan?", options: ["V.I.Vernadskiy", "E.Zyuss", "V.Dokuchayev", "J.Lamark"], correct: 0 },
+            { chapter: 5, question: "Yer yuzida tirik organizmlarning yig'indisi nima deb ataladi?", options: ["Biota", "Biotsenoz", "Biotop", "Biogeotsenoz"], correct: 0 },
+            { chapter: 5, question: "Tugallanadigan tiklanmaydigan resurslarni ko'rsating.", options: ["Yer osti qazilma boyliklari", "Oltin, ko'mir, okean suvlari", "O'simlik, tuproq, neft", "Hayvonlar, suv, havo"], correct: 0 },
+            { chapter: 5, question: "\"Issiqxona effekti\" va ozon qatlamining yo'q qilinishi ta'sir qiladi …", options: ["Hamma davlatlarga", "Rivojlangan davlarlar iqtisodiyotiga", "Rossiya va MDHga", "AQSh va Yevropaga"], correct: 0 },
+            { chapter: 5, question: "Ozon qatlamining asosiy qismi necha km balandlikda joylashgan?", options: ["20 – 25km balandlikda", "25 – 30km balandlikda", "35 – 40km balandlikda", "40 - 45 km balandlikda"], correct: 0 },
+            { chapter: 5, question: "Yerdagi iqlimning isishi ……. bilan bog'liq.", options: ["\"Issiqxona effekti\" bilan", "Ozon ekrani bilan", "Smogning paydo bo'lishi bilan", "Chang - to'zonlar bilan"], correct: 0 },
+            
+            // BOB 6 - Biosferada suvning ahamiyati
+            { chapter: 6, question: "Katta geologik aylanma quyidagilarni o'z ichiga oladi:", options: ["Suvning aylanishi", "Azotning aylanishi", "Fosforning aylanishi", "Kislorodning aylanishi"], correct: 0 },
+            { chapter: 6, question: "Oqim bilan asosan passiv harakatlanadigan suv organizmlari nima deyiladi?", options: ["Plankton", "Bentos", "Nekton", "Neyston"], correct: 0 },
+            { chapter: 6, question: "Dunyoda o'simIik va hayvon turlari xilma-xilligini ko'rsating?", options: ["O'simliklar 500 ming, hayvonlar 2 mln", "O'simliklar 550 ming, hayvonlar 1, 6 mln", "O'simliklar 700 ming, hayvonlar 1, 7 mln", "O'simliklar 1 mln., hayvonlar 2 mln"], correct: 0 },
+            { chapter: 6, question: "\"Biosfera\" atamasi birinchi marta 1875 yilda qo'llagan olim kim?", options: ["E.Zyuss", "J.Lamark", "T.Maltus", "L.Paster"], correct: 0 },
+            { chapter: 6, question: "Chang inson umrini qisqartiradi degan fikr muallifi?", options: ["Ibn sino", "Arastu", "Gippokrat", "Teofrast"], correct: 0 },
+            { chapter: 6, question: "Fotosintez jarayonida hosil bo'ladi …", options: ["kislorod va uglevodlar", "karbonat angidrid va xlorofill", "suv va uglevodlar", "kislorod va aminokislotalar"], correct: 0 },
+            
+            // BOB 7 - Litosfera ekologiyasi
+            { chapter: 7, question: "Quruqlikning umumiy maydoni … tashkil qiladi?", options: ["148000 mln.ga ni", "178000 mln.ga ni", "159000 mln.ga ni", "168000 mln.ga ni"], correct: 0 },
+            { chapter: 7, question: "Tuproq –deb nimaga aytiladi?", options: ["Yer yuzasining ustki g'ovak, unumdor qatlamiga", "Yer yuzasining qattiq qatlamiga", "Yer yuzasining unumdor qatlamiga", "Yer yuzasining ustki qatlamiga"], correct: 0 },
+            { chapter: 7, question: "Tuproq … muhim rol o'ynaydi.", options: ["organizmlar uchun hayot muhiti, ozuqa manbai hisoblanadi, moddalarning kichik biologik va katta geologik aylanma harakatida", "organizmlar uchun hayot muhiti, katta geologik aylanma harakatida", "organizmlar uchun hayot muhiti, ozuqa manbai hisoblanadi, moddalarning kichik biologik aylanma harakatida", "organizmlar uchun katta geologik aylanma harakatida"], correct: 0 },
+            { chapter: 7, question: "Tuproqni biosferadagi bajaradigan faoliyatiga qarab organik hayot zanjirining eng muhim … – deb yuritsa bo'ladi.", options: ["xalqa", "ekotizim", "tsenoz", "landshaft"], correct: 0 },
+            { chapter: 7, question: "... eroziya deyiladi.", options: ["Yer yuzasi ustki unumdor qismining suv yuvib yoki shamol ta'sirida uchirib olib ketilishi", "Yer yuzasi ustki unumdor qismining suv yuvib, shamol ta'sirida uchirib olib ketilishi va atmosferani ifloslanishi", "Yer yuzasi ustki unumdor qismining shamol ta'sirida uchirib olib ketilishi", "Yer yuzasi ustki unumdor qismining suv yuvib ketilishi"], correct: 0 },
+            { chapter: 7, question: "Tuproqning shamol ta'sirida eroziyaga uchrashishi ... deb ham ataladi.", options: ["deflyatsiya", "melioratsiya", "defolyatsiya", "rekultivatsiya"], correct: 0 },
+            { chapter: 7, question: "Tuproqni ifloslantiruvchi manbalar:", options: ["Qishloq xo'jaligi, sanoat korxonalari, maishiy chiqindilar", "Sanoat korxonalari, maishiy chiqindilar, yerlami xaydash", "Maishiy chiqindilar, o'simlik, xayvon qoldiqlari", "Neft mahsulotlari, biogen moddalar"], correct: 0 },
+            { chapter: 7, question: "Tuproq eroziyasining turlari:", options: ["Suv, shamol, antropogen", "Deflyatsiya, normal, tezlashgan", "Antropogen, tezlashgan, shamol", "Suv, normal, deflyatsiya"], correct: 0 },
+            { chapter: 7, question: "Yerning qaysi qismlari litosfera tarkibiga kiradi?", options: ["Yer po'stlog'i va mantiyaning ustki qismi", "Yer po'stlog'i, mantiya, yadro", "Mantiya va yadro", "Tuproq, yer po'stlog'i, mantiya"], correct: 0 },
+            { chapter: 7, question: "Yerdagi tirik organizmlar uchun birlamchi energiya manbai:", options: ["Quyosh radiatsiyasi", "Elektr energiyasi", "Yer osti qazilmalari", "Shamol energiyasi"], correct: 0 },
+            { chapter: 7, question: "Yer yuzidagi eng katta ekotizimni ajrating?", options: ["Biosfera", "Noosfera", "Ekosfera", "Litosfera"], correct: 0 },
+            { chapter: 7, question: "Biosferaning yangi sifat holati nima?", options: ["Noosfera", "Litosfera", "Troposfera", "Ionosfera"], correct: 0 },
+            { chapter: 7, question: "Yer sharida o'simliklarga boy tabiiy zona qaysi?", options: ["Nam ekvatorial o'rmonlar zonasi", "Saxrolar zonasi", "Tayga zonasi", "Tundra zonasi"], correct: 0 },
+            { chapter: 7, question: "Suv o'simliklar tanasining necha foizini tashkil qiladi?", options: ["10-95% ini", "50% ini", "25-30 % ini", "40 -98% ini"], correct: 0 },
+            { chapter: 7, question: "Gidrosfera yer yuzining necha % ini egallagan?", options: ["71%", "75-80%", "85%", "50%"], correct: 0 },
+            { chapter: 7, question: "Eroziya nima?", options: ["Tuproqni suv va shamol ta'sirida yemirilishi", "Chorva mollari ta'sirida yemirilishi", "Tuproq strukturasining buzilishi", "Tuproqda ko'p miqdorda nam to'planishi"], correct: 0 },
+            { chapter: 7, question: "Yer qobig'ining suv qatlami nima deb ataladi?", options: ["Gidrosfera", "Liosfera", "Atmosfera", "Biosfera"], correct: 0 },
+            { chapter: 7, question: "Оqova suvlar qanday yo'llar bilan tozalanadi?", options: ["Mexanik, kimyoviy, biologik", "Fizik, mexanik", "Mexanik, biologik", "Filtrlash, tindirish, xlorlash"], correct: 0 },
+            { chapter: 7, question: "O'simliklar tabiiy resurslaning qaysi kategoriyasiga kiradi?", options: ["Tugallanadigan tiklanadigan", "Tugallanmaydigan", "Tugallanadigan tiklanmaydigan", "Qayta tiklanmaydigan"], correct: 0 },
+            { chapter: 7, question: "Yer yuzidagi tuproq qatlamining asosini ... tashkil etadi.", options: ["Litosfera", "Gidrosfera", "Biosfera", "Noosfera"], correct: 0 },
+            { chapter: 7, question: "Yer po'stining qalinligi qancha?", options: ["5 - 80 km gacha", "3 - 70 km gacha", "4 - 80 km gacha", "2-50 km gacha"], correct: 0 },
+            
+            // BOB 8 - Ekologik muammolar
+            { chapter: 8, question: "Ekologik vaziyat deganda…. tushuniladi.", options: ["Tirik organizmlar va inson uchun mahaliy va mintaqaviy darajada qulay yoki noqulay ekologik sharoitlar yig'indisi", "Tabiatga, uning tarkibiy komponentlariga sanoat va qishloq xo'jaligini ta'siri", "Insonning tabiatga salbiy va ijobiy ta'sirlari yig'indisi", "Hayvonotga bo'lgan barcha to'g'ri va noto'g'ri munosabatini aytish mumkin"], correct: 0 },
+            { chapter: 8, question: "Ekologik muammo nima?", options: ["Tabiat bilan jamiyat o'rtasidagi muvozanatning o'zgarishi", "Koinotni Yer sayyorasiga ta'siri", "Tabiatdagi o'zgarishlar", "Tabiatning insonga aks ta'siri"], correct: 0 },
+            { chapter: 8, question: "Ekologik muammolarning xillarini ajrating?", options: ["Mahalliy, mintaqaviy, umumbashariy", "Mahalliy, hayotiy, milliy", "Siyosiy, global, mahalliy", "Ijtimoiy, mintaqaviy, umumbashariy"], correct: 0 },
+            { chapter: 8, question: "Qishloq xo'jaligida begona o'tlarga qarshi ishlatiladigan modda nomini ayting?", options: ["Gerbitsid", "Akaritsid", "Fungitsid", "Insektitsid"], correct: 0 },
+            { chapter: 8, question: "Ekologik tanglik deganda...", options: ["Jamiyatning ishlab chiqaruvchi kuchlari bilan ishlab chiqarish munosabatlarining nomuvofiqligi tushuniladi", "Ma'lum mintaqada aholi sonining ortishi", "Aholining yalpi nobud bo'lishi tushuniladi", "Noqulay iqtisodiy oqibatlarning kelib chiqishi tushuniladi"], correct: 0 },
+            { chapter: 8, question: "Tugaydigan, tiklanadigan resurslarni ajrating?", options: ["O'simlik va hayvonlar, tuproq", "Tuproq, suv, havo", "Yerosti qazilmalari", "Suv, havo, energiya"], correct: 0 },
+            { chapter: 8, question: "Asosiy issiqxona effektini paydo bo'lishiga sababchi gazlar qaysilar?", options: ["Karbonat angidrid, metan, azot (Il)oksidi", "Karbonat angidrid, oltingugurt (II) oksidi, azot (IV) oksidi", "Oltingugurt (IV) oksidi, kislorod, azot (IV) oksidi", "Oltingugurt (II) oksidi, is gazi, karbonat angidrid"], correct: 0 },
+            { chapter: 8, question: "Ozon qatlamining yemirilish sabablari …", options: ["Xlorftormetan (freonlar) birikmalar", "Avtotransportlardan chiqadigan gazlar", "Zavod va fabrikalardan chiqadigan uglerod oksidlar", "Ultrabinafsha nurlar"], correct: 0 },
+            { chapter: 8, question: "O'zbekiston Respublikasida \"Tabiatni muhofaza qilish\" haqidagi qonun qachon qabul qilindi?", options: ["1992-yil 9-dekabr", "1993-yil 9-dekabr", "1996-yil 9-dekabr", "1996-yil 26-dekabr"], correct: 0 },
+            { chapter: 8, question: "O'zbekistonda suvlarni ifloslovchi asosiy tarmoqni ko'rsating?", options: ["Qishloq xo'jaligi", "Kommunal-maishiy", "Energetika", "Sanoat"], correct: 0 },
+            { chapter: 8, question: "Muhitning sun'iy ifloslanishini to'liq qatorini ko'rsating.", options: ["Fizik, kimyoviy, biologik, radiatsiya, shovqin", "Ultrabinafsha nurlar, radiatsiya", "Kimyoviy, biologik, shovqin", "Mexanik, biologik, tabiiy"], correct: 0 },
+            { chapter: 8, question: "O'zbekistondagi ekologik markaz nomini ko'rsating.", options: ["Jayron", "Baday-to'qay", "Mingbuloq", "Zarafshon"], correct: 0 },
+            { chapter: 8, question: "\"Parnik effekti\" deganda nimani tushunasiz?", options: ["CO gazi quyoshning qisqa to'qinli nurlarini bemalol er yuzasiga o'tqazib yuboradi va aksincha, er yuzasiga koinotga tarqaladigan uzun to'lqinli nurlarni ushlab qoladi", "Havoda namligi ko'payganini tushunamiz", "Havoda bug' ko'payib ketganini", "Har-xil gazlar bir joyda yig'ilib qolganini tushunamiz"], correct: 0 },
+            { chapter: 8, question: "\"Smog\" deganda nimani tushunasiz?", options: ["Iqlimning namligi tufayli atmosferadagi antropogen chang va gazlar ximiyaviy reaksiyaga kirishib, o'ta zaxarlashadi va sarg'ish achchiq tuman vujudga keladi", "Namlik joylarda tuman paydo bo'ladi,uni atrofida chang yig'ilganining \"smog\" deyiladi", "Qora bulutlarni", "Tezdan tez yog'in bo'lganlikni"], correct: 0 },
+            { chapter: 8, question: "Global ekologik muammolarni ko'rsating:", options: ["Yer iqlimining o'zgarib borishi, kislotali yomg'irlar, cho'llashish", "O'simlik va hayvonot dunyosining kamayib borishi", "Orolning qurishi", "Madaniy yodgorliklarning emirilishi"], correct: 0 },
+            { chapter: 8, question: "Ekologik halokat nima?", options: ["Ekologik vaziyatni asl holiga qaytarib bo'lmaydigan darajada buzish", "Ekologik vaziyatni qisman buzilganligi", "Ekologik vaziyatni optimal holatga yaqinlashganligi", "Insonning tabiatga salbiy va ijobiy ta'sirlari yig'indisi tushuniladi"], correct: 0 },
+            { chapter: 8, question: "Ekologik xavfsizlik- bu:", options: ["Ekologik vaziyatning tabiiy muhit va inson salomatligiga xavf-xatarsiz bo'lgan holati", "Ekologik vaziyatni duchor bo'lganligi", "Ekologik vaziyatning bir ko'rinishi", "Ekologik vaziyatni beqarorlashgan holati"], correct: 0 },
+            { chapter: 8, question: "Ekologik barqaror rivojlanish:", options: ["Tashqi omillar ta'sirida ma'lum ekotizim(hudud)ning o'z tuzilmasi va faoliyatini saqlab qolish xususiyati", "Ichki omillar ta'sirida ma'lum ekotizimning o'zini muhofaza qila olishi", "Ekotizimning salbiy ta'sir, o'zgarishlarga javob bera olishi", "Ekotizim rivojini inson tomonida boshqarilishi"], correct: 0 },
+            { chapter: 8, question: "Mintaqaviy (regional) ekologik muammolarga ... misol bo'la oladi.", options: ["Orol dengizining qurib borishi, Arnasoy ko'llari atrofidagi ekologik muammolar, Sarez ko'li muammosi", "Ishlab chiqarish korxonalarida vujudga keladigan ba'zi bir favqulodda vaziyatlar", "Giyohvand moddalar savdosi", "Ozon qatlamining siyraklanishi"], correct: 0 }
+        ];
+
+        const chapters = [
+            { id: 1, name: "Ekologiya faniga kirish", icon: "fas fa-seedling" },
+            { id: 2, name: "Muhit tushunchasi. Yashash muhitlari", icon: "fas fa-globe-americas" },
+            { id: 3, name: "Populyatsiyalar ekologiyasi", icon: "fas fa-users" },
+            { id: 4, name: "Biotsenoz va Ekosistemalar", icon: "fas fa-tree" },
+            { id: 5, name: "Atmosfera va Biosfera", icon: "fas fa-cloud" },
+            { id: 6, name: "Biosferada suvning ahamiyati", icon: "fas fa-water" },
+            { id: 7, name: "Litosfera ekologiyasi", icon: "fas fa-mountain" },
+            { id: 8, name: "Ekologik muammolar", icon: "fas fa-exclamation-triangle" }
+        ];
+
+        // App State
+        let currentUser = null;
+        let currentTest = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let timerInterval = null;
+        let remainingTime = 0;
+        let testStartTime = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadTheme();
+            populateChapters();
+        });
+
+        // Auth Functions
+        function checkAuth() {
+            const savedUser = localStorage.getItem('ekotest_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainApp();
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+        }
+
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                alert('Iltimos, barcha maydonlarni to\'ldiring!');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('ekotest_users') || '[]');
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('ekotest_user', JSON.stringify(user));
+                showMainApp();
+            } else {
+                alert('Login yoki parol noto\'g\'ri!');
+            }
+        }
+
+        function register() {
+            const fullname = document.getElementById('regFullname').value.trim();
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            
+            if (!fullname || !username || !password) {
+                alert('Iltimos, barcha maydonlarni to\'ldiring!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('Parol kamida 6 ta belgidan iborat bo\'lishi kerak!');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('ekotest_users') || '[]');
+            
+            if (users.find(u => u.username === username)) {
+                alert('Bu foydalanuvchi nomi band!');
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now(),
+                fullname,
+                username,
+                password,
+                stats: { correct: 0, total: 0, tests: 0 },
+                history: [],
+                createdAt: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('ekotest_users', JSON.stringify(users));
+            
+            currentUser = newUser;
+            localStorage.setItem('ekotest_user', JSON.stringify(newUser));
+            showMainApp();
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('ekotest_user');
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('authPage').classList.remove('hidden');
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function showMainApp() {
+            document.getElementById('authPage').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            updateUserStats();
+            showPage('dashboard');
+        }
+
+        // Page Navigation
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById(page + 'Page').classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-primary', 'text-white');
+            });
+            
+            const activeBtn = document.querySelector(`.nav-btn[data-page="${page}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-primary', 'text-white');
+            }
+            
+            if (page === 'dashboard') updateDashboard();
+            if (page === 'leaderboard') updateLeaderboard();
+            if (page === 'profile') updateProfile();
+        }
+
+        // Theme
+        function toggleThemeMenu() {
+            document.getElementById('themeMenu').classList.toggle('hidden');
+        }
+
+        function setTheme(theme) {
+            document.body.className = theme + ' min-h-screen leaf-pattern';
+            localStorage.setItem('ekotest_theme', theme);
+            document.getElementById('themeMenu').classList.add('hidden');
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('ekotest_theme') || '';
+            document.body.className = theme + ' min-h-screen leaf-pattern';
+        }
+
+        // Close theme menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#themeMenu') && !e.target.closest('[onclick="toggleThemeMenu()"]')) {
+                document.getElementById('themeMenu').classList.add('hidden');
+            }
+        });
+
+        // Dashboard
+        function updateDashboard() {
+            document.getElementById('welcomeName').textContent = currentUser.fullname.split(' ')[0];
+            updateUserStats();
+        }
+
+        function updateUserStats() {
+            const stats = currentUser.stats || { correct: 0, total: 0, tests: 0 };
+            document.getElementById('statCorrect').textContent = stats.correct;
+            document.getElementById('statTotal').textContent = stats.total;
+            
+            const accuracy = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+            document.getElementById('statAccuracy').textContent = accuracy + '%';
+            
+            // Calculate rank
+            const users = JSON.parse(localStorage.getItem('ekotest_users') || '[]');
+            const sorted = users.sort((a, b) => {
+                const aScore = (a.stats?.correct || 0) * 10 + (a.stats?.total || 0);
+                const bScore = (b.stats?.correct || 0) * 10 + (b.stats?.total || 0);
+                return bScore - aScore;
+            });
+            const rank = sorted.findIndex(u => u.id === currentUser.id) + 1;
+            document.getElementById('statRank').textContent = '#' + rank;
+        }
+
+        function populateChapters() {
+            const grid = document.getElementById('chaptersGrid');
+            grid.innerHTML = chapters.map(ch => {
+                const count = allQuestions.filter(q => q.chapter === ch.id).length;
+                return `
+                    <div class="card rounded-xl p-4 hover:shadow-lg transition cursor-pointer fade-in" onclick="startChapterTest(${ch.id})">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <i class="${ch.icon} text-primary text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold">${ch.id}-bob: ${ch.name}</h4>
+                                <p class="text-sm text-secondary">${count} ta savol</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Populate chapter select in random modal
+            const select = document.getElementById('chapterSelect');
+            select.innerHTML = '<option value="all">Barcha boblar</option>';
+            chapters.forEach(ch => {
+                select.innerHTML += `<option value="${ch.id}">${ch.id}-bob: ${ch.name}</option>`;
+            });
+        }
+
+        // Modals
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function showVariantSelection() {
+            const list = document.getElementById('variantList');
+            list.innerHTML = chapters.map(ch => {
+                const questions = allQuestions.filter(q => q.chapter === ch.id);
+                const variants = Math.ceil(questions.length / 10);
+                return `
+                    <div class="card rounded-lg p-4">
+                        <h4 class="font-semibold mb-3"><i class="${ch.icon} mr-2 text-primary"></i>${ch.id}-bob: ${ch.name}</h4>
+                        <div class="grid grid-cols-5 gap-2">
+                            ${Array.from({length: variants}, (_, i) => `
+                                <button onclick="startVariantTest(${ch.id}, ${i + 1})" class="btn-primary py-2 rounded-lg text-sm">
+                                    ${i + 1}-variant
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('variantModal').classList.remove('hidden');
+        }
+
+        function showRandomTestSettings() {
+            document.getElementById('randomModal').classList.remove('hidden');
+        }
+
+        function showGroupTest() {
+            document.getElementById('groupModal').classList.remove('hidden');
+            document.getElementById('groupCodeSection').classList.add('hidden');
+            document.getElementById('groupCreatedSection').classList.add('hidden');
+        }
+
+        // Test Functions
+        function startChapterTest(chapterId) {
+            const questions = allQuestions.filter(q => q.chapter === chapterId);
+            startTest(shuffleArray([...questions]).slice(0, 10), `${chapterId}-bob testi`);
+        }
+
+        function startVariantTest(chapterId, variant) {
+            closeModal('variantModal');
+            const questions = allQuestions.filter(q => q.chapter === chapterId);
+            const start = (variant - 1) * 10;
+            const variantQuestions = questions.slice(start, start + 10);
+            startTest(variantQuestions, `${chapterId}-bob, ${variant}-variant`);
+        }
+
+        function startRandomTest() {
+            closeModal('randomModal');
+            const count = parseInt(document.getElementById('questionCount').value);
+            const time = parseInt(document.getElementById('timeLimit').value);
+            const chapter = document.getElementById('chapterSelect').value;
+            
+            let questions = chapter === 'all' ? [...allQuestions] : allQuestions.filter(q => q.chapter == chapter);
+            questions = shuffleArray(questions).slice(0, Math.min(count, questions.length));
+            
+            startTest(questions, 'Tasodifiy test', time);
+        }
+
+        function startTest(questions, title, timeLimit = 0) {
+            currentTest = questions.map(q => ({
+                ...q,
+                shuffledOptions: shuffleWithCorrect(q.options, q.correct)
+            }));
+            currentQuestionIndex = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            testStartTime = Date.now();
+            
+            document.getElementById('testTitle').textContent = title;
+            
+            if (timeLimit > 0) {
+                remainingTime = timeLimit * 60;
+                document.getElementById('timerDisplay').classList.remove('hidden');
+                startTimer();
+            } else {
+                document.getElementById('timerDisplay').classList.add('hidden');
+            }
+            
+            showPage('test');
+            displayQuestion();
+        }
+
+        function shuffleWithCorrect(options, correctIndex) {
+            const correct = options[correctIndex];
+            const shuffled = shuffleArray([...options]);
+            const newCorrectIndex = shuffled.indexOf(correct);
+            return { options: shuffled, correctIndex: newCorrectIndex };
+        }
+
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function displayQuestion() {
+            const q = currentTest[currentQuestionIndex];
+            document.getElementById('testProgress').textContent = `Savol ${currentQuestionIndex + 1}/${currentTest.length}`;
+            document.getElementById('progressBar').style.width = `${((currentQuestionIndex + 1) / currentTest.length) * 100}%`;
+            document.getElementById('questionText').textContent = q.question;
+            
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = q.shuffledOptions.options.map((opt, i) => `
+                <button onclick="selectOption(${i})" class="option-btn w-full text-left p-4 rounded-lg ${userAnswers[currentQuestionIndex] === i ? 'selected' : ''}">
+                    <span class="inline-block w-8 h-8 rounded-full bg-gray-100 text-center leading-8 mr-3 font-semibold">${String.fromCharCode(65 + i)}</span>
+                    ${opt}
+                </button>
+            `).join('');
+            
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextBtn').textContent = currentQuestionIndex === currentTest.length - 1 ? 'Tugatish' : 'Keyingi';
+            document.getElementById('nextBtn').innerHTML = currentQuestionIndex === currentTest.length - 1 
+                ? '<i class="fas fa-check mr-2"></i>Tugatish' 
+                : 'Keyingi<i class="fas fa-chevron-right ml-2"></i>';
+        }
+
+        function selectOption(index) {
+            userAnswers[currentQuestionIndex] = index;
+            displayQuestion();
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentTest.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        function exitTest() {
+            if (confirm('Testdan chiqishni xohlaysizmi? Natijalar saqlanmaydi.')) {
+                stopTimer();
+                showPage('dashboard');
+            }
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                remainingTime--;
+                updateTimerDisplay();
+                if (remainingTime <= 0) {
+                    finishTest();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            const display = document.getElementById('timerText');
+            display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (remainingTime <= 60) {
+                document.getElementById('timerDisplay').classList.add('timer-warning');
+            }
+        }
+
+        function finishTest() {
+            stopTimer();
+            
+            let correct = 0;
+            currentTest.forEach((q, i) => {
+                if (userAnswers[i] === q.shuffledOptions.correctIndex) {
+                    correct++;
+                }
+            });
+            
+            const wrong = currentTest.length - correct;
+            const percent = Math.round((correct / currentTest.length) * 100);
+            const timeTaken = Math.round((Date.now() - testStartTime) / 1000);
+            
+            // Update user stats
+            currentUser.stats = currentUser.stats || { correct: 0, total: 0, tests: 0 };
+            currentUser.stats.correct += correct;
+            currentUser.stats.total += currentTest.length;
+            currentUser.stats.tests += 1;
+            
+            // Add to history
+            currentUser.history = currentUser.history || [];
+            currentUser.history.unshift({
+                date: new Date().toISOString(),
+                correct,
+                total: currentTest.length,
+                percent,
+                time: timeTaken
+            });
+            currentUser.history = currentUser.history.slice(0, 20);
+            
+            // Save
+            localStorage.setItem('ekotest_user', JSON.stringify(currentUser));
+            const users = JSON.parse(localStorage.getItem('ekotest_users') || '[]');
+            const idx = users.findIndex(u => u.id === currentUser.id);
+            if (idx !== -1) {
+                users[idx] = currentUser;
+                localStorage.setItem('ekotest_users', JSON.stringify(users));
+            }
+            
+            // Show results
+            document.getElementById('resultCorrect').textContent = correct;
+            document.getElementById('resultWrong').textContent = wrong;
+            document.getElementById('resultPercent').textContent = percent + '%';
+            
+            const icon = document.getElementById('resultIcon');
+            const title = document.getElementById('resultTitle');
+            const subtitle = document.getElementById('resultSubtitle');
+            
+            if (percent >= 90) {
+                icon.className = 'w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 bg-green-100';
+                icon.innerHTML = '<i class="fas fa-trophy text-5xl text-green-500"></i>';
+                title.textContent = 'Ajoyib natija!';
+                subtitle.textContent = 'Siz zo\'r ishlayapsiz, davom eting!';
+            } else if (percent >= 70) {
+                icon.className = 'w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 bg-blue-100';
+                icon.innerHTML = '<i class="fas fa-medal text-5xl text-blue-500"></i>';
+                title.textContent = 'Yaxshi natija!';
+                subtitle.textContent = 'Biroz ko\'proq mashq qiling!';
+            } else if (percent >= 50) {
+                icon.className = 'w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 bg-yellow-100';
+                icon.innerHTML = '<i class="fas fa-star text-5xl text-yellow-500"></i>';
+                title.textContent = 'O\'rtacha natija';
+                subtitle.textContent = 'Mavzularni takrorlang!';
+            } else {
+                icon.className = 'w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 bg-red-100';
+                icon.innerHTML = '<i class="fas fa-book-open text-5xl text-red-500"></i>';
+                title.textContent = 'Ko\'proq o\'rganing';
+                subtitle.textContent = 'Mavzularni qaytadan o\'qib chiqing!';
+            }
+            
+            showPage('results');
+        }
+
+        function reviewAnswers() {
+            const container = document.getElementById('reviewContainer');
+            container.innerHTML = currentTest.map((q, i) => {
+                const userAnswer = userAnswers[i];
+                const isCorrect = userAnswer === q.shuffledOptions.correctIndex;
+                
+                return `
+                    <div class="card rounded-xl p-4 fade-in ${isCorrect ? 'border-l-4 border-green-500' : 'border-l-4 border-red-500'}">
+                        <p class="font-medium mb-3">${i + 1}. ${q.question}</p>
+                        <div class="space-y-2">
+                            ${q.shuffledOptions.options.map((opt, j) => {
+                                let classes = 'p-3 rounded-lg ';
+                                if (j === q.shuffledOptions.correctIndex) {
+                                    classes += 'bg-green-100 text-green-800 border border-green-300';
+                                } else if (j === userAnswer && !isCorrect) {
+                                    classes += 'bg-red-100 text-red-800 border border-red-300';
+                                } else {
+                                    classes += 'bg-gray-50';
+                                }
+                                return `
+                                    <div class="${classes}">
+                                        <span class="font-semibold mr-2">${String.fromCharCode(65 + j)}.</span>${opt}
+                                        ${j === q.shuffledOptions.correctIndex ? '<i class="fas fa-check ml-2 text-green-600"></i>' : ''}
+                                        ${j === userAnswer && !isCorrect ? '<i class="fas fa-times ml-2 text-red-600"></i>' : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            showPage('review');
+        }
+
+        // Leaderboard
+        function updateLeaderboard() {
+            const users = JSON.parse(localStorage.getItem('ekotest_users') || '[]');
+            const sorted = users.sort((a, b) => {
+                const aScore = (a.stats?.correct || 0) * 100 + (a.stats?.total || 0);
+                const bScore = (b.stats?.correct || 0) * 100 + (b.stats?.total || 0);
+                return bScore - aScore;
+            });
+            
+            const list = document.getElementById('leaderboardList');
+            list.innerHTML = sorted.map((user, i) => {
+                const accuracy = user.stats?.total > 0 ? Math.round((user.stats.correct / user.stats.total) * 100) : 0;
+                let rankClass = '';
+                let rankIcon = i + 1;
+                
+                if (i === 0) {
+                    rankClass = 'rank-gold text-white';
+                    rankIcon = '🥇';
+                } else if (i === 1) {
+                    rankClass = 'rank-silver text-white';
+                    rankIcon = '🥈';
+                } else if (i === 2) {
+                    rankClass = 'rank-bronze text-white';
+                    rankIcon = '🥉';
+                }
+                
+                const isCurrentUser = user.id === currentUser.id;
+                
+                return `
+                    <div class="flex items-center p-4 ${isCurrentUser ? 'bg-green-50' : 'hover:bg-gray-50'} transition">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold ${rankClass || 'bg-gray-100'}">
+                            ${rankIcon}
+                        </div>
+                        <div class="flex-1 ml-4">
+                            <p class="font-semibold ${isCurrentUser ? 'text-primary' : ''}">${user.fullname}</p>
+                            <p class="text-sm text-secondary">@${user.username}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-lg">${user.stats?.correct || 0}</p>
+                            <p class="text-sm text-secondary">${accuracy}% aniqlik</p>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<div class="p-8 text-center text-secondary">Hali hech kim test ishlamagan</div>';
+        }
+
+        // Profile
+        function updateProfile() {
+            document.getElementById('profileAvatar').textContent = currentUser.fullname.charAt(0).toUpperCase();
+            document.getElementById('profileName').textContent = currentUser.fullname;
+            document.getElementById('profileUsername').textContent = '@' + currentUser.username;
+            document.getElementById('profileTests').textContent = currentUser.stats?.tests || 0;
+            
+            const accuracy = currentUser.stats?.total > 0 ? Math.round((currentUser.stats.correct / currentUser.stats.total) * 100) : 0;
+            document.getElementById('profileAccuracy').textContent = accuracy + '%';
+            
+            const recentContainer = document.getElementById('recentResults');
+            const history = currentUser.history || [];
+            
+            recentContainer.innerHTML = history.length > 0 ? history.slice(0, 10).map(h => {
+                const date = new Date(h.date);
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="font-medium">${h.correct}/${h.total} to'g'ri</p>
+                            <p class="text-sm text-secondary">${date.toLocaleDateString('uz-UZ')}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold ${h.percent >= 70 ? 'text-green-500' : h.percent >= 50 ? 'text-yellow-500' : 'text-red-500'}">${h.percent}%</p>
+                            <p class="text-sm text-secondary">${Math.floor(h.time / 60)}:${(h.time % 60).toString().padStart(2, '0')}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('') : '<p class="text-center text-secondary py-4">Hali testlar ishlanmagan</p>';
+        }
+
+        // Group Test (Simulated)
+        function createGroup() {
+            const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+            document.getElementById('createdGroupCode').textContent = code;
+            document.getElementById('groupCodeSection').classList.add('hidden');
+            document.getElementById('groupCreatedSection').classList.remove('hidden');
+            
+            // Simulate members
+            document.getElementById('membersList').innerHTML = `
+                <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                    <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        ${currentUser.fullname.charAt(0)}
+                    </div>
+                    <span>${currentUser.fullname}</span>
+                    <span class="ml-auto text-sm text-primary">Admin</span>
+                </div>
+            `;
+        }
+
+        function showJoinGroup() {
+            document.getElementById('groupCodeSection').classList.remove('hidden');
+            document.getElementById('groupCreatedSection').classList.add('hidden');
+        }
+
+        function joinGroup() {
+            const code = document.getElementById('groupCode').value.trim();
+            if (code.length !== 6) {
+                alert('Guruh kodi 6 ta belgidan iborat bo\'lishi kerak!');
+                return;
+            }
+            // Simulate joining
+            alert('Guruhga qo\'shildingiz! Test boshlanishini kuting.');
+            closeModal('groupModal');
+        }
+
+        function startGroupTest() {
+            closeModal('groupModal');
+            const questions = shuffleArray([...allQuestions]).slice(0, 20);
+            startTest(questions, 'Guruh testi', 15);
+        }
+    </script>
+</body>
+</html>
